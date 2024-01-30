@@ -1,0 +1,82 @@
+data_params:
+  data_paths:
+    normal_data_path: "data_store/physionet_clean/physionet_scaled.parquet"
+    anom_data_path: "data_store/physionet_c/generated_tsa.parquet"
+    meta_data_path: null
+  data_splits:
+    train_end_idx: 3999
+    val_end_idx: 4500
+    random_state: 96
+  data_scaling: null # scaling is done beforehand
+model_params:
+  mixing_params:
+    mix_ratio: 0.1 # the ratio at which we mix the anomaly data with the normal data in the test set
+    mix_idx: [1, 2] # idx of [train, val, test]
+  emb_size: 500 # number of examples to use in L_val
+  model_type: tsap
+  epochs: 100
+  batch_size: 64
+  aug_model_ckpt: "checkpoints/pretrained_faug/physionet/a=3_trend.ckpt"
+  contam_rate: 0.15 # mixing rate at which we mix the anomaly data with the normal data for L_val
+  aug_params:
+    lvl: "learn"
+    loc: [100, 2001]
+    len: [400, 600]
+  a_init: [-0.01, 0.05, 0.20]
+  aug_lr: 0.001
+  det_lr: 0.002
+  num_inner_loop: 10
+  n_warm_start_epochs: 3 
+  ts_input_size: 2714
+  detector_params:
+    params:
+      - type: conv
+        params:
+          in_channels: 1
+          out_channels: 32
+          kernel_size: 10
+          stride: 2
+      - type: relu
+      - type: batch_norm
+        params:
+          num_features: 32
+      - type: dropout
+        params:
+          p: 0.2
+      - type: conv
+        params:
+          in_channels: 32
+          out_channels: 16
+          kernel_size: 10
+          dilation: 2
+          stride: 2
+      - type: relu
+      - type: batch_norm
+        params:
+          num_features: 16
+      - type: dropout
+        params:
+          p: 0.2
+      - type: conv
+        params:
+          in_channels: 16
+          out_channels: 8
+          kernel_size: 10
+          dilation: 4
+          stride: 4
+      - type: relu
+      - type: batch_norm
+        params:
+          num_features: 8
+      - type: dropout
+        params:
+          p: 0.2
+      - type: avg_pool
+        params:
+          kernel_size: 10
+          stride: 3
+      - type: flatten
+      - type: linear
+        params:
+          in_features: 400
+          out_features: 10

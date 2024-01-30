@@ -1,0 +1,83 @@
+data_params:
+  data_paths:
+    normal_data_path: "data_store/mocap_clean/normal.parquet"
+    anom_data_path: "data_store/mocap_b/generated_tsa.parquet"
+    meta_data_path: null
+  data_splits:
+    train_end_idx: 1500
+    val_end_idx: 1750
+    random_state: 96
+  data_scaling: null
+model_params:
+  mixing_params:
+    mix_ratio: 0.1
+    mix_idx: [1, 2]
+  emb_size: 249
+  model_type: tsap
+  epochs: 100
+  batch_size: 64
+  aug_model_ckpt: "checkpoints/pretrained_faug/mocap/a=3_frequency.ckpt"
+  contam_rate: 0.15
+  aug_params:
+    lvl: "learn"
+    loc: [1, 6.1]
+    len: [1, 3.1]
+  normalize_hparams: false
+  a_init: [2.0, 2.0, 1.0]
+  aug_lr: 0.001
+  det_lr: 0.002
+  num_inner_loop: 10
+  n_warm_start_epochs: 3 
+  ts_input_size: 1500
+  detector_params:
+    params:
+      - type: conv
+        params:
+          in_channels: 1
+          out_channels: 32
+          kernel_size: 10
+          stride: 2
+      - type: relu
+      - type: batch_norm
+        params:
+          num_features: 32
+      - type: dropout
+        params:
+          p: 0.2
+      - type: conv
+        params:
+          in_channels: 32
+          out_channels: 16
+          kernel_size: 10
+          dilation: 2
+          stride: 2
+      - type: relu
+      - type: batch_norm
+        params:
+          num_features: 16
+      - type: dropout
+        params:
+          p: 0.2
+      - type: conv
+        params:
+          in_channels: 16
+          out_channels: 8
+          kernel_size: 10
+          dilation: 4
+          stride: 4
+      - type: relu
+      - type: batch_norm
+        params:
+          num_features: 8
+      - type: dropout
+        params:
+          p: 0.2
+      - type: avg_pool
+        params:
+          kernel_size: 10
+          stride: 3
+      - type: flatten
+      - type: linear
+        params:
+          in_features: 200
+          out_features: 10
