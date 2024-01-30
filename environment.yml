@@ -1,0 +1,21 @@
+name: tsa
+channels:
+  - defaults
+  - pytorch
+  - nvidia
+dependencies:
+  - pandas
+  - numpy
+  - matplotlib
+  - pytorch==1.13.1
+  - pytorch-cuda=11.6
+  - ipykernel
+  - scikit-learn
+  - pip:
+    - jupyter
+    - wandb
+    - pytorch-lightning
+    - pyarrow
+    - higher
+    - geomloss # for Wasserstein distance
+    - seaborn
