@@ -203,6 +203,20 @@ class AnomParams:
                 "start": [i for i in np.arange(100, 2001, 1)],
                 "length": 500,
             },
+            "physionet_e": {
+                "mean": 0.4,
+                "start": [i for i in np.arange(100, 2001, 1)],
+                "length": [i for i in np.arange(400, 600, 1)],
+            },
+            "physionet_f": {
+                "mean": 0.4,
+                "start": [i for i in np.arange(100, 2001, 1)],
+                "length": 500,
+            },
+            "physionet_g": {
+                "spike": 9.0,
+                "start": [i for i in np.arange(100, 2601, 100)],
+            },
         }
 
 
