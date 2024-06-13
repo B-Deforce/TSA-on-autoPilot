@@ -21,3 +21,4 @@ The project is organized as follows:
 - **/shell_scripts**: Scripts to train and/or test TSAP.
 - **/src**: The source code for the core functionalities of TSAP.
 - **main.py**: The main Python script for running TSAP.
+- **additional_figures.pdf**: Contains additional figures for the appendix of the main text.
